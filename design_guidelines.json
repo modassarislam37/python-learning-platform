@@ -1,0 +1,98 @@
+{
+  "theme": "light",
+  "archetype": "Archetype 4 (Swiss & High-Contrast)",
+  "emotional_tone": "Authority, precision, functional beauty, and objective progress. The learning experience should feel like operating high-end industrial tech.",
+  "typography": {
+    "primary_font": "Cabinet Grotesk",
+    "secondary_font": "IBM Plex Mono",
+    "font_install_instructions": "Import Cabinet Grotesk from fontshare or standard cdn. Import IBM Plex Mono from Google Fonts.",
+    "hierarchy": {
+      "h1": "font-['Cabinet_Grotesk'] text-5xl sm:text-6xl tracking-tighter leading-none font-black text-[#0A0A0A]",
+      "h2": "font-['Cabinet_Grotesk'] text-3xl sm:text-4xl tracking-tight leading-none font-extrabold text-[#0A0A0A]",
+      "h3": "font-['Cabinet_Grotesk'] text-xl sm:text-2xl tracking-tight font-bold text-[#0A0A0A]",
+      "body": "font-['IBM_Plex_Mono'] text-base leading-relaxed text-[#0A0A0A]",
+      "overline": "font-['IBM_Plex_Mono'] text-xs uppercase tracking-[0.2em] font-bold text-gray-500",
+      "code": "font-['IBM_Plex_Mono'] text-sm tracking-tight"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#FFFFFF",
+      "foreground": "#0A0A0A",
+      "surface": "#F4F4F5",
+      "border": "#0A0A0A",
+      "primary": "#0055FF",
+      "primary_foreground": "#FFFFFF",
+      "accent_yellow": "#FFD700",
+      "accent_green": "#00FF66",
+      "accent_red": "#FF3333",
+      "muted": "#A1A1AA"
+    },
+    "css_variables": {
+      "light": {
+        "--background": "0 0% 100%",
+        "--foreground": "0 0% 4%",
+        "--card": "0 0% 100%",
+        "--card-foreground": "0 0% 4%",
+        "--popover": "0 0% 100%",
+        "--popover-foreground": "0 0% 4%",
+        "--primary": "220 100% 50%",
+        "--primary-foreground": "0 0% 100%",
+        "--secondary": "0 0% 96%",
+        "--secondary-foreground": "0 0% 4%",
+        "--muted": "0 0% 96%",
+        "--muted-foreground": "0 0% 45%",
+        "--accent": "50 100% 50%",
+        "--accent-foreground": "0 0% 4%",
+        "--destructive": "0 100% 50%",
+        "--destructive-foreground": "0 0% 100%",
+        "--border": "0 0% 4%",
+        "--input": "0 0% 4%",
+        "--ring": "0 0% 4%",
+        "--radius": "0rem"
+      }
+    }
+  },
+  "layout_and_spacing": {
+    "philosophy": "Generous Spacing, Asymmetry, Sharp Grid Borders (Neo-Brutalism).",
+    "containers": "p-8 md:p-12",
+    "grid_system": "Bento grids with gap-8 md:gap-12.",
+    "borders": "Expose the skeleton. Use 1px or 2px solid black borders on major structural elements to create a technical 'Control Room' aesthetic."
+  },
+  "components": {
+    "buttons": "rounded-none border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-200 font-['IBM_Plex_Mono'] uppercase tracking-widest text-sm py-3 px-6",
+    "cards": "rounded-none border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(10,10,10,1)] hover:shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] hover:-translate-y-1 transition-all duration-200",
+    "inputs": "rounded-none border-2 border-black bg-white focus-visible:ring-0 focus-visible:border-[#0055FF] font-['IBM_Plex_Mono']",
+    "badges": "rounded-none border border-black px-2 py-1 text-xs uppercase font-['IBM_Plex_Mono'] tracking-widest bg-[#FFD700] text-black"
+  },
+  "pages": {
+    "landing": "Massive typography. Use 'hero_image' abstract pattern as a sharp, boxed hero asset. Incorporate an editorial marquee reading 'PYTHON / DATA SCIENCE / AI ENGINEERING'.",
+    "dashboard": "Strict grid lines (Control Room grid mode). High contrast metrics. Emphasize current streak and progress bar.",
+    "curriculum": "Timeline or Asymmetrical grid. Locked topics have dashed borders and grayed text. Unlocked have solid black borders. Completed have solid black background with white text.",
+    "lesson_view": "Editorial reading layout. Large text for clarity. Embedded code blocks must use a high-contrast dark theme (e.g., pure black background with neon syntax highlights) against the white page.",
+    "playground": "Two-pane or resizable split view. Editor on the left, output terminal on the right. Must look like a real IDE terminal.",
+    "exam": "Focus mode. Huge timer in IBM Plex Mono. Minimalist distraction-free layout.",
+    "certificate": "Pure CSS/HTML. Stark editorial design. Huge 'CERTIFICATE OF COMPLETION' in Cabinet Grotesk. 4px black borders, technical 'document' vibe with subtle geometric alignments."
+  },
+  "media_assets": [
+    {
+      "category": "hero_background",
+      "url": "https://static.prod-images.emergentagent.com/jobs/72b2520a-ef08-41b9-867c-0085b4907ad2/images/0634c8a92df71a09bba05442abe4fef33cdb1935f8a698945f9101f76b41aac3.png",
+      "description": "Abstract minimalist background, Swiss style, strict grid patterns, light grey and signal blue intersecting lines. Use in hero section as an inset image or graphic asset."
+    },
+    {
+      "category": "lifestyle_context",
+      "url": "https://images.pexels.com/photos/12902899/pexels-photo-12902899.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Focused businesswoman coding. Use in about section or motivation banner."
+    }
+  ],
+  "instructions_to_main_agent": [
+    "You MUST use pure CSS and Tailwind for the layout. Ensure Shadcn components are modified to have 'rounded-none' to match the brutalist tech vibe.",
+    "Install Phosphor Icons or Lucide-react (as requested by user, but Phosphor preferred for dev tools. If restricted to Lucide, use sharp variants).",
+    "Implement Pyodide properly for the interactive code playground.",
+    "Use localStorage for saving ALL state: progress, unlocked modules, exam scores, code snippets.",
+    "Ensure all interactive elements have data-testid attributes (kebab-case, role-based).",
+    "Use CSS Grid prominently. Draw 1px borders around grid items to create the 'exposed skeleton' look.",
+    "Do NOT use gradients. Use solid colors: White, Black, Signal Blue, Warning Yellow."
+  ]
+}
