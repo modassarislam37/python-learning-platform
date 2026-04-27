@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Terminal, BarChart3, Brain, Rocket, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { loadState, saveState } from '../lib/storage';
-import { curriculum } from '../data/curriculum';
+import { curriculum, projects as projectList, getAllTopics } from '../data/curriculum';
 
 export default function Landing() {
   const nav = useNavigate();
   const [name, setName] = useState(() => loadState().studentName || '');
+  const totalTopics = getAllTopics().length;
+  const totalQuestions = getAllTopics().reduce((s, t) => s + t.exam.length, 0);
+  const totalProjects = projectList.length;
 
   const start = () => {
     const trimmed = name.trim() || 'Student';
@@ -63,9 +66,9 @@ export default function Landing() {
             </div>
 
             <div className="mt-10 grid grid-cols-3 gap-4 max-w-xl">
-              <Stat n="28" l="Topics" />
-              <Stat n="140+" l="Exam Qs" />
-              <Stat n="9" l="Projects" />
+              <Stat n={String(totalTopics)} l="Topics" />
+              <Stat n={`${totalQuestions}+`} l="Exam Qs" />
+              <Stat n={String(totalProjects)} l="Projects" />
             </div>
           </div>
 
