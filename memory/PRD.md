@@ -28,13 +28,17 @@ Frontend-only React SPA (no backend calls). React Router for navigation. Tailwin
 
 ## Implemented (2026-02)
 - Routes: `/`, `/dashboard`, `/curriculum`, `/learn/:topicId`, `/exam/:topicId`, `/playground`, `/projects`, `/certificate`.
-- 4 tracks / 23 topics: Python Basics (7), Python Advanced (6), Data Science (5), AI/ML (5).
-- 5-question exam per topic → 115 questions total.
-- 9 guided projects across tracks.
+- 4 tracks / **27 topics** (Python Basics 8, Python Advanced 7, Data Science 6, AI/ML 6).
+- 5-question exam per topic → **135 questions total**. MCQ + output + fill-in-the-blank. Per-question Hint button.
+- **13 guided projects** across tracks.
 - PDF certificate generator (jspdf) with student name, scores, issue date, cert ID.
 - Dashboard with dynamic stats (progress bar, streak, avg score, per-track progress).
+- **Per-topic short video** (YouTube embed, lazy-loaded on click) with "Search YouTube" fallback for more videos.
+- **Key Takeaways** block on every lesson (3 quick bullets).
+- **Personal Notes** per topic (textarea, auto-saved to `localStorage` under `notes:{topicId}`).
+- **Curriculum search + filter** (all / unlocked / completed / locked).
 - Neo-brutalist UI: Cabinet Grotesk + IBM Plex Mono, black borders, blue/yellow accents, marquee banner, data-testids across all interactive elements.
-- Tested end-to-end via testing_agent_v3: happy path (land → pass exam → unlock next) confirmed working; Pyodide loads in 2–5s.
+- Tested end-to-end via testing_agent_v3 (iteration_2.json): 14/14 scenarios pass.
 
 ## Backlog
 ### P1

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { curriculum, getAllTopics } from '../data/curriculum';
 import { getTopicMeta } from '../data/meta';
-import { loadState, isTopicUnlocked, saveState } from '../lib/storage';
+import { loadState, isTopicUnlocked } from '../lib/storage';
 import CodePlayground from '../components/CodePlayground';
 import { ArrowRight, ArrowLeft, GraduationCap, Play, ExternalLink, Lightbulb, NotebookPen, Save } from 'lucide-react';
 
@@ -44,7 +44,7 @@ export default function Lesson() {
   const nextUnlocked = next ? isTopicUnlocked(next, curriculum, { ...state, completed: { ...state.completed, [topic.id]: state.completed[topic.id] || { score: 100 } } }) : false;
 
   const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(topic.title + ' python tutorial')}`;
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${meta.yt}?start=${meta.ytStart || 0}&rel=0`;
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${meta?.yt}?start=${meta?.ytStart || 0}&rel=0`;
 
   return (
     <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-10">
@@ -190,6 +190,3 @@ export default function Lesson() {
     </div>
   );
 }
-
-// avoid unused-var lint
-void saveState;
