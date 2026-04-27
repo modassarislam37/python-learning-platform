@@ -1,0 +1,28 @@
+{
+  "summary": "Frontend e2e test of Python Academy (localStorage-only SPA). Landing → Dashboard → Curriculum → Lesson → Exam (passed 100%) → next topic unlock → Playground (Pyodide loaded) → Projects → Certificate-locked all work. Critical finding: curriculum has only 23 topics but Landing page hero/stat card and PRD state 28 topics. Certificate page reads from curriculum correctly ('Complete all 23 topics') — discrepancy is missing content (5 topics) in /app/frontend/src/data/curriculum.js.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Landing hero Stat card", "issue": "Hardcoded '28 Topics' but curriculum only contains 23 topics. Either add 5 missing topics to curriculum.js or change the stat to 23.", "selector": "Landing.jsx Stat n='28'", "priority": "HIGH"},
+      {"component": "Curriculum data", "issue": "PRD expects 28 topics (Python Basics, Python Advanced, Data Science, AI/ML) but /app/frontend/src/data/curriculum.js only has 23 (1 unlocked + 22 locked on /curriculum). Cert page correctly reflects 23 but hero/PRD expects 28.", "selector": "data/curriculum.js", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Add 5 missing topics to /app/frontend/src/data/curriculum.js so total = 28 (matching landing hero stat and PRD). Each topic needs 5-question exam. Expected list per PRD includes: intro, variables, data_types, strings, lists, tuples, dicts_sets, conditionals, loops, functions, modules_packages, errors_exceptions, files_io, oop_basics, oop_advanced, decorators_generators, async_concurrency, testing_packaging, numpy_basics, pandas_basics, pandas_advanced, visualization, statistics, ml_intro, supervised_learning, deep_learning, transformers_nlp, mlops_deploy (28)."
+  ],
+  "critical_code_review_comments": [
+    "Landing.jsx hardcodes '28' and '140+' stats while curriculum is only 23 * 5 = 115 questions — derive from curriculum to avoid drift.",
+    "Certificate gating logic correctly derives topic count from curriculum; good."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "~85% (11/13 flows PASS; 2 related to topic-count mismatch)"},
+  "test_credentials": "None (localStorage-only, no auth).",
+  "seed_data_creation": "Injected localStorage py_academy_v1.completed with 28 topic IDs to test certificate unlock — only 5 matched real curriculum, confirming 23-topic reality vs 28-topic PRD/hero.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Happy path (landing → exam pass → unlock next) confirmed working with correct answers Q1=opt1, Q2='Python', Q3='#', Q4=opt1, Q5='5' -> 100% pass. Pyodide CDN loads in playground within ~2-5s. After main agent adds missing 5 topics, re-run the same flow and retest certificate unlock with all 28 completed topics (use the full list in action_items).",
+  "rca of the issue": "Landing.jsx line 66 hardcodes Stat n='28' Topics and n='140+' Exam Qs; but curriculum.js only exports 23 topics (5 * 23 = 115 questions). Root cause: incomplete data seeding in curriculum.js. Reproduction: (1) goto /curriculum — count cards = 23 (1 unlocked + 22 locked via data-testid^='topic-link-' and 'topic-locked-'). (2) goto /certificate — banner reads 'Complete all 23 topics'. Mitigation: expand curriculum.js to 28 topic objects each with 5-question exam, or update Landing stats + PRD to 23."
+}
