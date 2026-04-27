@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getAllTopics } from '../data/curriculum';
 import { loadState, saveState, touchStreak } from '../lib/storage';
-import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, Lightbulb } from 'lucide-react';
 
 export default function Exam() {
   const { topicId } = useParams();
@@ -10,6 +10,7 @@ export default function Exam() {
   const topic = useMemo(() => getAllTopics().find(t => t.id === topicId), [topicId]);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [hints, setHints] = useState({});
 
   const questions = topic?.exam || [];
 
@@ -93,11 +94,31 @@ export default function Exam() {
 
       <div className="mt-10 space-y-8">
         {questions.map((q, i) => (
-          <div key={i} className="border-2 border-black p-6" data-testid={`question-${i}`}>
+          <div key={q.q} className="border-2 border-black p-6" data-testid={`question-${i}`}>
             <div className="flex items-baseline gap-3">
               <span className="font-mono text-xs uppercase tracking-widest text-neutral-500">Q{String(i + 1).padStart(2, '0')}</span>
               <span className="font-mono text-[11px] uppercase tracking-widest border border-black px-2 py-0.5">{q.type}</span>
+              {!submitted && (
+                <button
+                  type="button"
+                  onClick={() => setHints(h => ({ ...h, [i]: !h[i] }))}
+                  data-testid={`q${i}-hint-btn`}
+                  className="ml-auto font-mono text-[11px] uppercase tracking-widest inline-flex items-center gap-1 border border-black px-2 py-0.5 hover:bg-[#FFD700]"
+                >
+                  <Lightbulb className="w-3 h-3" /> {hints[i] ? 'Hide hint' : 'Hint'}
+                </button>
+              )}
             </div>
+            {hints[i] && !submitted && (
+              <div className="mt-3 p-3 border border-dashed border-black bg-[#F4F4F5] font-mono text-xs" data-testid={`q${i}-hint`}>
+                {q.type === 'mcq'
+                  ? `Tip: only ${q.options.length} options — eliminate the obviously wrong ones first.`
+                  : q.type === 'output'
+                    ? `Tip: the expected answer has ${String(q.answer).length} characters and starts with "${String(q.answer).charAt(0)}".`
+                    : `Tip: the answer starts with "${String(q.answer).charAt(0)}" and has ${String(q.answer).length} characters.`
+                }
+              </div>
+            )}
             <pre className="font-mono text-[15px] leading-relaxed whitespace-pre-wrap mt-3">{q.q}</pre>
 
             <div className="mt-4">

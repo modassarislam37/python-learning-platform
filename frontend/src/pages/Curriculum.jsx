@@ -1,11 +1,40 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { curriculum } from '../data/curriculum';
 import { loadState, isTopicUnlocked } from '../lib/storage';
-import { Lock, CheckCircle2, Circle, ArrowRight } from 'lucide-react';
+import { Lock, CheckCircle2, Circle, ArrowRight, Search, X } from 'lucide-react';
 
 export default function Curriculum() {
   const state = loadState();
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('all'); // all | unlocked | completed | locked
+
+  const q = query.trim().toLowerCase();
+
+  const filteredTracks = useMemo(() => {
+    return curriculum.map(track => {
+      const topics = track.topics.filter(topic => {
+        if (q && !topic.title.toLowerCase().includes(q)) return false;
+        const unlocked = isTopicUnlocked(topic, curriculum, state);
+        const done = !!state.completed[topic.id];
+        if (filter === 'unlocked') return unlocked && !done;
+        if (filter === 'completed') return done;
+        if (filter === 'locked') return !unlocked;
+        return true;
+      });
+      return { ...track, topics };
+    }).filter(t => t.topics.length > 0);
+  }, [q, filter, state]);
+
+  const FilterBtn = ({ value, label, testId }) => (
+    <button
+      onClick={() => setFilter(value)}
+      data-testid={testId}
+      className={`font-mono text-xs uppercase tracking-widest px-3 py-2 border-2 border-black transition-colors ${filter === value ? 'bg-black text-white' : 'bg-white hover:bg-[#FFD700]'}`}
+    >
+      {label}
+    </button>
+  );
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-10">
@@ -16,8 +45,40 @@ export default function Curriculum() {
         of Python to deploying ML models.
       </p>
 
+      {/* Search + filters */}
+      <div className="mt-8 flex flex-wrap gap-3 items-center">
+        <div className="relative flex-1 min-w-[260px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search topics..."
+            data-testid="curriculum-search"
+            className="w-full border-2 border-black pl-10 pr-10 py-3 font-mono text-sm uppercase tracking-widest focus:outline-none focus:border-[#0055FF]"
+          />
+          {query && (
+            <button onClick={() => setQuery('')} data-testid="curriculum-search-clear"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-black hover:text-white">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <FilterBtn value="all" label="All" testId="filter-all" />
+          <FilterBtn value="unlocked" label="Unlocked" testId="filter-unlocked" />
+          <FilterBtn value="completed" label="Completed" testId="filter-completed" />
+          <FilterBtn value="locked" label="Locked" testId="filter-locked" />
+        </div>
+      </div>
+
+      {filteredTracks.length === 0 && (
+        <div className="mt-10 border-2 border-dashed border-neutral-400 p-10 text-center font-mono text-sm text-neutral-500">
+          No topics match your filters.
+        </div>
+      )}
+
       <div className="mt-10 space-y-16">
-        {curriculum.map((track, ti) => (
+        {filteredTracks.map(track => (
           <div key={track.id} data-testid={`track-${track.id}`}>
             <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
               <div>

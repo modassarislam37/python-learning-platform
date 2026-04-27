@@ -2,7 +2,9 @@
 // Each topic contains lesson content, examples and a 5-question exam.
 // Exam question types: 'mcq' | 'output' | 'fill'
 
-export const curriculum = [
+import { extraTopics, extraProjects } from './extra';
+
+const _baseCurriculum = [
   {
     id: 'basics',
     name: 'Python Basics',
@@ -545,7 +547,13 @@ Prompt engineering + RAG (retrieval-augmented generation) are essential LLM skil
   },
 ];
 
-export const projects = [
+// Merge extra topics into the appropriate track
+export const curriculum = _baseCurriculum.map(track => ({
+  ...track,
+  topics: [...track.topics, ...(extraTopics[track.id] || [])],
+}));
+
+const _baseProjects = [
   { id: 'p1', track: 'basics', title: 'Number Guessing Game', level: 'Beginner', brief: 'Build a CLI number-guessing game that gives hints after each guess, tracks attempts, and announces the winner.' },
   { id: 'p2', track: 'basics', title: 'Todo List (CLI)', level: 'Beginner', brief: 'Add, remove, mark-complete and list todos. Persist to a JSON file.' },
   { id: 'p3', track: 'advanced', title: 'Password Manager', level: 'Intermediate', brief: 'Use classes + file I/O. Store services and credentials; encrypt with a simple cipher.' },
@@ -556,6 +564,8 @@ export const projects = [
   { id: 'p8', track: 'aiml', title: 'Movie Recommender', level: 'Advanced', brief: 'Content-based recommender using TF-IDF + cosine similarity. Bonus: collaborative filter variant.' },
   { id: 'p9', track: 'aiml', title: 'Image Classifier (Transfer Learning)', level: 'Advanced', brief: 'Fine-tune a pretrained ResNet/CNN on a small image dataset. Track metrics, export weights.' },
 ];
+
+export const projects = [..._baseProjects, ...extraProjects];
 
 export function getAllTopics() {
   return curriculum.flatMap(t => t.topics.map(tp => ({ ...tp, trackId: t.id, trackName: t.name })));
