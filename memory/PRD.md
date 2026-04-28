@@ -27,18 +27,21 @@ Frontend-only React SPA (no backend calls). React Router for navigation. Tailwin
 7. Progress dashboard: streak, avg score, completion %.
 
 ## Implemented (2026-02)
-- Routes: `/`, `/dashboard`, `/curriculum`, `/learn/:topicId`, `/exam/:topicId`, `/playground`, `/projects`, `/certificate`.
+- Routes: `/`, `/dashboard`, `/curriculum`, `/learn/:topicId`, `/practice/:topicId`, `/exam/:topicId`, `/playground`, `/projects`, `/certificate`.
 - 4 tracks / **27 topics** (Python Basics 8, Python Advanced 7, Data Science 6, AI/ML 6).
-- 5-question exam per topic → **135 questions total**. MCQ + output + fill-in-the-blank. Per-question Hint button.
+- Per-topic **5-question Practice MCQ** with instant explanations and unlimited retries → **135 practice MCQs total** with authored explanations.
+- Per-topic **5-question Exam** (MCQ + output prediction + fill-in-the-blank) requires 70% to unlock next topic. **Exam gated behind 100% practice completion.**
+- **Strict learning ladder:** Learn → Practice (100%) → Exam (70%) → Next topic.
 - **13 guided projects** across tracks.
 - PDF certificate generator (jspdf) with student name, scores, issue date, cert ID.
-- Dashboard with dynamic stats (progress bar, streak, avg score, per-track progress).
-- **Per-topic short video** (YouTube embed, lazy-loaded on click) with "Search YouTube" fallback for more videos.
+- Dashboard: dynamic stats, progress bar, streak, avg score, per-track progress, **"Saved on this device" badge**, **Export Progress (JSON download)** + **Import Progress (JSON upload)** so users never lose progress even if they clear cache or switch device.
+- **Per-topic short video** (YouTube embed, lazy-loaded) with "Search YouTube" fallback.
 - **Key Takeaways** block on every lesson (3 quick bullets).
 - **Personal Notes** per topic (textarea, auto-saved to `localStorage` under `notes:{topicId}`).
-- **Curriculum search + filter** (all / unlocked / completed / locked).
+- **Curriculum search + filter** (all / unlocked / completed / locked) + "Practice done · exam ready" tile badge.
+- **Exam hint button** per question (type-aware: shows partial answer / length / option-count).
 - Neo-brutalist UI: Cabinet Grotesk + IBM Plex Mono, black borders, blue/yellow accents, marquee banner, data-testids across all interactive elements.
-- Tested end-to-end via testing_agent_v3 (iteration_2.json): 14/14 scenarios pass.
+- Tested end-to-end via testing_agent_v3 (iteration_3.json): 11/11 scenarios pass; one critical Curriculum bug caught and fixed mid-test.
 
 ## Backlog
 ### P1

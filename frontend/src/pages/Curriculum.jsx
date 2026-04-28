@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { curriculum } from '../data/curriculum';
-import { loadState, isTopicUnlocked, isExamUnlocked } from '../lib/storage';
+import { loadState, isTopicUnlocked } from '../lib/storage';
 import { Lock, CheckCircle2, Circle, ArrowRight, Search, X, Dumbbell } from 'lucide-react';
 
 export default function Curriculum() {

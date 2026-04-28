@@ -62,7 +62,7 @@ export default function Exam() {
           <Lock className="w-10 h-10" />
           <div className="font-display font-black text-4xl tracking-tight mt-3">Exam locked</div>
           <p className="font-mono text-sm mt-3 max-w-lg">
-            Complete the practice set first so you know you\u2019re ready. Pass all practice
+            Complete the practice set first so you know you're ready. Pass all practice
             questions (unlimited retries) to unlock this exam.
           </p>
           <Link to={`/practice/${topic.id}`} data-testid="goto-practice-link"

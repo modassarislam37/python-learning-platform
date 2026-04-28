@@ -28,7 +28,9 @@ export default function Dashboard() {
     const a = document.createElement('a');
     a.href = url;
     a.download = `py-academy-progress-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
     a.click();
+    a.remove();
     URL.revokeObjectURL(url);
     setImportMsg('Progress exported.');
     setTimeout(() => setImportMsg(''), 2500);
