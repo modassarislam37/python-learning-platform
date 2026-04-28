@@ -152,7 +152,7 @@ export default function Exam() {
                     const wrong = submitted && sel && oi !== q.answer;
                     return (
                       <button
-                        key={oi}
+                        key={opt}
                         type="button"
                         onClick={() => !submitted && setAnswers(a => ({ ...a, [i]: oi }))}
                         data-testid={`q${i}-opt-${oi}`}

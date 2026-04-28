@@ -32,8 +32,8 @@ export default function Playground() {
           { t: 'Tip', d: 'Use print() to see values. The stdout panel captures everything.' },
           { t: 'Tip', d: 'Loading scientific packages (numpy, pandas) can be done via micropip inside code.' },
           { t: 'Tip', d: 'Press Run anytime. Reset reverts to the starter snippet.' },
-        ].map((x, i) => (
-          <div key={i} className="border-2 border-black p-4 bg-white">
+        ].map((x) => (
+          <div key={x.d} className="border-2 border-black p-4 bg-white">
             <div className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">{x.t}</div>
             <div className="font-mono text-sm mt-2">{x.d}</div>
           </div>
