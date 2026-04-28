@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { curriculum, getAllTopics } from '../data/curriculum';
 import { getTopicMeta } from '../data/meta';
-import { loadState, isTopicUnlocked } from '../lib/storage';
+import { loadState, isTopicUnlocked, isExamUnlocked } from '../lib/storage';
 import CodePlayground from '../components/CodePlayground';
-import { ArrowRight, ArrowLeft, GraduationCap, Play, ExternalLink, Lightbulb, NotebookPen, Save } from 'lucide-react';
+import { ArrowRight, ArrowLeft, GraduationCap, Play, ExternalLink, Lightbulb, NotebookPen, Save, Dumbbell, Lock } from 'lucide-react';
 
 export default function Lesson() {
   const { topicId } = useParams();
@@ -152,15 +152,31 @@ export default function Lesson() {
           <div className="border-2 border-black p-5 bg-[#FFD700]">
             <div className="font-display font-extrabold text-2xl tracking-tight">Ready to prove it?</div>
             <p className="font-mono text-sm mt-2">
-              Pass a 5-question exam with 70%+ to unlock the next topic.
+              Step 1 — nail the practice (all correct). Step 2 — pass the exam (70%+) to unlock the next topic.
             </p>
             <button
-              onClick={() => nav(`/exam/${topic.id}`)}
-              data-testid="take-exam-btn"
-              className="mt-4 w-full font-mono uppercase tracking-widest text-sm px-5 py-3 bg-black text-white border-2 border-black hover:bg-white hover:text-black inline-flex items-center justify-center gap-2"
+              onClick={() => nav(`/practice/${topic.id}`)}
+              data-testid="practice-btn"
+              className="mt-4 w-full font-mono uppercase tracking-widest text-sm px-5 py-3 bg-black text-white border-2 border-black hover:bg-[#0055FF] inline-flex items-center justify-center gap-2"
             >
-              <GraduationCap className="w-4 h-4" /> Take the Exam
+              <Dumbbell className="w-4 h-4" /> Start Practice
             </button>
+            {isExamUnlocked(topic.id, state) ? (
+              <button
+                onClick={() => nav(`/exam/${topic.id}`)}
+                data-testid="take-exam-btn"
+                className="mt-3 w-full font-mono uppercase tracking-widest text-sm px-5 py-3 bg-white text-black border-2 border-black hover:bg-black hover:text-white inline-flex items-center justify-center gap-2"
+              >
+                <GraduationCap className="w-4 h-4" /> Take the Exam
+              </button>
+            ) : (
+              <div
+                data-testid="exam-locked-note"
+                className="mt-3 w-full font-mono uppercase tracking-widest text-xs px-5 py-3 bg-white/70 text-neutral-600 border-2 border-dashed border-black inline-flex items-center justify-center gap-2"
+              >
+                <Lock className="w-4 h-4" /> Exam unlocks after practice
+              </div>
+            )}
           </div>
 
           {state.completed[topic.id] && (

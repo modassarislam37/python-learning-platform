@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getAllTopics } from '../data/curriculum';
-import { loadState, saveState, touchStreak } from '../lib/storage';
-import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, Lightbulb } from 'lucide-react';
+import { loadState, saveState, touchStreak, isExamUnlocked } from '../lib/storage';
+import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, Lightbulb, Dumbbell, Lock } from 'lucide-react';
 
 export default function Exam() {
   const { topicId } = useParams();
@@ -51,6 +51,28 @@ export default function Exam() {
   const allTopics = getAllTopics();
   const idx = allTopics.findIndex(t => t.id === topic.id);
   const next = idx < allTopics.length - 1 ? allTopics[idx + 1] : null;
+
+  const state = loadState();
+  const examReady = isExamUnlocked(topic.id, state);
+
+  if (!examReady) {
+    return (
+      <div className="max-w-[800px] mx-auto px-6 md:px-10 py-20">
+        <div className="border-2 border-black p-8 bg-[#FFD700]" data-testid="exam-locked-screen">
+          <Lock className="w-10 h-10" />
+          <div className="font-display font-black text-4xl tracking-tight mt-3">Exam locked</div>
+          <p className="font-mono text-sm mt-3 max-w-lg">
+            Complete the practice set first so you know you\u2019re ready. Pass all practice
+            questions (unlimited retries) to unlock this exam.
+          </p>
+          <Link to={`/practice/${topic.id}`} data-testid="goto-practice-link"
+            className="mt-6 inline-flex items-center gap-2 font-mono uppercase tracking-widest text-sm px-5 py-3 bg-black text-white border-2 border-black hover:bg-[#0055FF]">
+            <Dumbbell className="w-4 h-4" /> Start Practice
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[900px] mx-auto px-6 md:px-10 py-10">

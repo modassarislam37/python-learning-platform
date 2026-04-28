@@ -141,10 +141,11 @@ ship("you as an AI engineer")`}
 
       {/* How it works */}
       <section>
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-14 grid md:grid-cols-3 gap-6">
-          <Step n="01" t="Learn" d="Read focused lessons with worked examples. Keep it short and concrete." />
-          <Step n="02" t="Practice" d="Run real Python in the browser. Tweak examples, break them, fix them." />
-          <Step n="03" t="Prove" d="Pass a 70% exam to unlock the next topic. Build projects. Earn your certificate." />
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-14 grid md:grid-cols-4 gap-6">
+          <Step n="01" t="Learn" d="Read focused lessons, watch a short tutorial, run real Python in the browser." />
+          <Step n="02" t="Practice" d="Answer MCQs with instant explanations. Unlimited retries. Must get 100% to unlock the exam." />
+          <Step n="03" t="Prove" d="Pass a 70% exam (MCQ + output + fill-ins) to unlock the next topic." />
+          <Step n="04" t="Earn" d="Build projects, complete all tracks, and download your certificate." />
         </div>
       </section>
     </div>

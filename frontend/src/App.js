@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Curriculum from './pages/Curriculum';
 import Lesson from './pages/Lesson';
 import Exam from './pages/Exam';
+import Practice from './pages/Practice';
 import Playground from './pages/Playground';
 import Projects from './pages/Projects';
 import Certificate from './pages/Certificate';
@@ -22,6 +23,7 @@ function App() {
             <Route path="/curriculum" element={<Curriculum />} />
             <Route path="/learn/:topicId" element={<Lesson />} />
             <Route path="/exam/:topicId" element={<Exam />} />
+            <Route path="/practice/:topicId" element={<Practice />} />
             <Route path="/playground" element={<Playground />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/certificate" element={<Certificate />} />

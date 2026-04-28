@@ -1,15 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { curriculum, getAllTopics } from '../data/curriculum';
-import { loadState } from '../lib/storage';
-import { Flame, Trophy, BookOpen, ArrowRight, ChevronRight, Circle, CheckCircle2 } from 'lucide-react';
+import { loadState, exportAllData, importAllData } from '../lib/storage';
+import { Flame, Trophy, BookOpen, ArrowRight, ChevronRight, Circle, CheckCircle2, HardDrive, Download, Upload } from 'lucide-react';
 
 export default function Dashboard() {
-  const state = loadState();
+  const [state, setState] = useState(() => loadState());
   const all = getAllTopics();
   const completed = Object.keys(state.completed || {}).length;
   const total = all.length;
   const pct = total ? Math.round((completed / total) * 100) : 0;
+  const fileRef = useRef(null);
+  const [importMsg, setImportMsg] = useState('');
 
   const nextTopic = useMemo(() => all.find(t => !state.completed[t.id]) || null, [all, state]);
 
@@ -18,6 +20,36 @@ export default function Dashboard() {
     if (!scores.length) return 0;
     return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
   }, [state]);
+
+  const onExport = () => {
+    const data = exportAllData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `py-academy-progress-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setImportMsg('Progress exported.');
+    setTimeout(() => setImportMsg(''), 2500);
+  };
+
+  const onImportFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const json = JSON.parse(text);
+      importAllData(json);
+      setState(loadState());
+      setImportMsg('Progress imported successfully.');
+    } catch (err) {
+      setImportMsg('Could not import: ' + err.message);
+    } finally {
+      e.target.value = '';
+      setTimeout(() => setImportMsg(''), 3500);
+    }
+  };
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-10">
@@ -31,13 +63,37 @@ export default function Dashboard() {
             {completed === 0 ? 'Start with your first lesson below.' : `You've completed ${completed}/${total} topics.`}
           </p>
         </div>
-        {completed === total && total > 0 && (
-          <Link to="/certificate" data-testid="get-certificate-btn"
-            className="font-mono uppercase tracking-widest text-sm px-5 py-3 bg-[#FFD700] border-2 border-black hover:bg-black hover:text-white inline-flex items-center gap-2">
-            <Trophy className="w-4 h-4" /> Get Certificate
-          </Link>
-        )}
+        <div className="flex flex-wrap gap-2">
+          <div
+            data-testid="saved-locally-badge"
+            className="font-mono text-[11px] uppercase tracking-widest border-2 border-black px-3 py-2 bg-[#F4F4F5] inline-flex items-center gap-2"
+            title="Your progress is saved in this browser"
+          >
+            <HardDrive className="w-3.5 h-3.5" /> Saved on this device
+          </div>
+          <button onClick={onExport} data-testid="export-progress-btn"
+            className="font-mono uppercase tracking-widest text-xs px-3 py-2 border-2 border-black hover:bg-black hover:text-white inline-flex items-center gap-2">
+            <Download className="w-3.5 h-3.5" /> Export
+          </button>
+          <button onClick={() => fileRef.current?.click()} data-testid="import-progress-btn"
+            className="font-mono uppercase tracking-widest text-xs px-3 py-2 border-2 border-black hover:bg-black hover:text-white inline-flex items-center gap-2">
+            <Upload className="w-3.5 h-3.5" /> Import
+          </button>
+          <input ref={fileRef} type="file" accept="application/json" className="hidden" onChange={onImportFile} data-testid="import-file-input" />
+          {completed === total && total > 0 && (
+            <Link to="/certificate" data-testid="get-certificate-btn"
+              className="font-mono uppercase tracking-widest text-sm px-5 py-3 bg-[#FFD700] border-2 border-black hover:bg-black hover:text-white inline-flex items-center gap-2">
+              <Trophy className="w-4 h-4" /> Get Certificate
+            </Link>
+          )}
+        </div>
       </div>
+
+      {importMsg && (
+        <div data-testid="import-message" className="mb-6 font-mono text-xs uppercase tracking-widest border-2 border-black bg-[#00FF66] px-4 py-2">
+          {importMsg}
+        </div>
+      )}
 
       {/* Stat grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

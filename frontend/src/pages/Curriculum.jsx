@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { curriculum } from '../data/curriculum';
-import { loadState, isTopicUnlocked } from '../lib/storage';
-import { Lock, CheckCircle2, Circle, ArrowRight, Search, X } from 'lucide-react';
+import { loadState, isTopicUnlocked, isExamUnlocked } from '../lib/storage';
+import { Lock, CheckCircle2, Circle, ArrowRight, Search, X, Dumbbell } from 'lucide-react';
 
 export default function Curriculum() {
   const state = loadState();
@@ -96,6 +96,7 @@ export default function Curriculum() {
                 const unlocked = isTopicUnlocked(topic, curriculum, state);
                 const done = !!state.completed[topic.id];
                 const score = state.completed[topic.id]?.score;
+                const practiceDone = !!state.practiceDone?.[topic.id];
 
                 const tile = (
                   <div className={`h-full border-2 p-5 transition-all ${done ? 'bg-black text-white border-black' : unlocked ? 'bg-white border-black hover:-translate-y-1 shadow-brutal' : 'bg-[#F4F4F5] border-dashed border-neutral-400 text-neutral-500'}`}>
@@ -108,7 +109,12 @@ export default function Curriculum() {
                     <div className="font-display font-bold text-xl tracking-tight mt-3 leading-tight">{topic.title}</div>
                     <div className={`font-mono text-xs mt-2 ${done ? 'text-white/70' : 'text-neutral-600'}`}>{topic.minutes} min · {topic.exam.length} questions</div>
                     {done && <div className="mt-4 font-mono text-xs uppercase tracking-widest inline-block bg-[#00FF66] text-black px-2 py-1 border border-white">Passed · {score}%</div>}
-                    {unlocked && !done && (
+                    {!done && practiceDone && unlocked && (
+                      <div className="mt-4 font-mono text-xs uppercase tracking-widest inline-flex items-center gap-1 bg-[#FFD700] text-black px-2 py-1 border border-black">
+                        <Dumbbell className="w-3 h-3" /> Practice done · exam ready
+                      </div>
+                    )}
+                    {unlocked && !done && !practiceDone && (
                       <div className="mt-4 font-mono text-xs uppercase tracking-widest inline-flex items-center gap-1">Start <ArrowRight className="w-3 h-3" /></div>
                     )}
                     {!unlocked && <div className="mt-4 font-mono text-xs uppercase tracking-widest">Locked</div>}

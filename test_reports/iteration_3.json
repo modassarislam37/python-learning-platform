@@ -1,0 +1,36 @@
+{
+  "summary": "Frontend-only testing of iteration 3 (Practice mode + Export/Import + lesson/exam gating). All 11 requested flows pass end-to-end. Found and fixed one critical undefined-variable bug in Curriculum.jsx that would have crashed the Curriculum page.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Curriculum.jsx",
+        "issue": "`practiceDone` was referenced (lines 111 & 116) but never declared in the topic .map() callback — would throw ReferenceError and blank the Curriculum page whenever any topic tile renders. FIXED by adding `const practiceDone = !!state.practiceDone?.[topic.id];` inside the map callback.",
+        "selector": "[data-testid='topic-link-*']",
+        "priority": "CRITICAL (fixed)"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Nothing blocking. Code review suggestion: consider deriving `practiceDone` in Curriculum.jsx via a helper (e.g., `isPracticeDone(topicId, state)`) in lib/storage.js so this symmetry with isExamUnlocked stays DRY.",
+    "Minor: Exam.jsx line 66 contains a Unicode escape `\\u2019` inside a JSX string literal — it renders as the literal text `\\u2019` instead of `\u2019` (right single quote). Replace with an actual `\u2019` character for clean UX."
+  ],
+  "critical_code_review_comments": [
+    "Curriculum.jsx used undefined `practiceDone` — caught only because tile code paths hit it; must be fixed (done).",
+    "Exam.jsx renders `\\u2019` as literal text (escape sequences don't expand inside JSX string literals).",
+    "storage.js importAllData performs no schema validation of `payload.main`; a malformed file would overwrite good progress. Consider shape-check + a confirmation dialog before overwrite.",
+    "Dashboard.jsx exportAllData triggers `a.click()` without appending to document — works in Chromium but not reliable on Firefox; consider `document.body.appendChild(a); a.click(); a.remove();`.",
+    "Practice.jsx uses `finished` state seeded from loadState() but the banner's `Save & unlock exam` button is only shown when `!finished` — if the user reloads mid-practice after completing, they can't re-click Save, which is fine, but the `practice-to-exam` still shows. OK."
+  ],
+  "updated_files": ["/app/frontend/src/pages/Curriculum.jsx"],
+  "success_rate": { "backend": "n/a", "frontend": "100%" },
+  "test_credentials": "n/a (no auth in app)",
+  "seed_data_creation": "Seeded localStorage key py_academy_v1 with { studentName:'TestUser', ... } to skip landing and exercise dashboard/curriculum/lesson/practice/exam flows. Cleared between phases for regression checks.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration 3 complete. Verified full happy path /learn/intro → /practice/intro (wrong-then-retry, then 100%) → /exam/intro (100%) → /learn/variables unlocked. Verified exam-locked-screen + goto-practice-link before practice; exam-locked-note replacing take-exam-btn on lesson until practice done. Export/Import round-trip verified: downloaded JSON had version=1 and main.studentName=TestUser; re-imported into empty localStorage restored practiceDone.intro and completed.intro. Curriculum tile shows PRACTICE DONE \u00b7 EXAM READY badge correctly after fix. Hero stats 27/135+/13 present on landing.",
+  "rca_of_fix": "Curriculum.jsx referenced `practiceDone` in two JSX conditionals without declaring it. Fix: added `const practiceDone = !!state.practiceDone?.[topic.id];` alongside the existing `unlocked`/`done`/`score` locals inside the per-topic .map() callback. Reproduction before fix: navigate to /curriculum — React throws ReferenceError and Curriculum section renders blank/error."
+}
